@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "multiqc"
-version = "1.36dev"
+version = "1.36.dev0+lbzhao"
 dependencies = [
     "boto3",              # for aws bedrock ai support
     "click",
@@ -43,7 +43,7 @@ authors = [
     { name = "Phil Ewels", email = "phil.ewels@seqera.io" },
     { name = "Vlad Savelyev", email = "vladislav.sav@gmail.com" },
 ]
-description = "Create aggregate bioinformatics analysis reports across many samples and tools"
+description = "Create aggregate bioinformatics analysis reports across many samples and tools (LBZhao fork: adds RSeQC 5.1.0+lbzhao categories)"
 readme = "README.md"
 license = { file = "LICENSE" }
 keywords = [
@@ -97,7 +97,8 @@ dev = [
 
 [project.urls]
 Homepage = "https://multiqc.info"
-Repository = "https://github.com/MultiQC/MultiQC"
+Repository = "https://github.com/LBZhao/MultiQC"
+"Original MultiQC" = "https://github.com/MultiQC/MultiQC"
 Issues = "https://github.com/MultiQC/MultiQC/issues"
 Documentation = "https://docs.seqera.io/multiqc"
 Changelog = "https://github.com/MultiQC/MultiQC/blob/main/CHANGELOG.md"
