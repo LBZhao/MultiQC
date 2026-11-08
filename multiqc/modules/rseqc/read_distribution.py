@@ -23,6 +23,9 @@ def parse_reports(module: BaseMultiqcModule) -> int:
         "cds_exons": r"CDS_Exons\s+(\d+)\s+(\d+)\s+([\d\.]+)\s*",
         "5_utr_exons": r"5'UTR_Exons\s+(\d+)\s+(\d+)\s+([\d\.]+)\s*",
         "3_utr_exons": r"3'UTR_Exons\s+(\d+)\s+(\d+)\s+([\d\.]+)\s*",
+        # LBZhao fork of RSeQC (5.1.0+lbzhao): exons of non-coding transcripts.
+        # Official RSeQC counts them as 5' or 3' UTR.
+        "noncoding_exons": r"Noncoding_Exons\s+(\d+)\s+(\d+)\s+([\d\.]+)\s*",
         "introns": r"Introns\s+(\d+)\s+(\d+)\s+([\d\.]+)\s*",
         "tss_up_1kb": r"TSS_up_1kb\s+(\d+)\s+(\d+)\s+([\d\.]+)\s*",
         "tss_up_5kb": r"TSS_up_5kb\s+(\d+)\s+(\d+)\s+([\d\.]+)\s*",
@@ -105,6 +108,7 @@ def parse_reports(module: BaseMultiqcModule) -> int:
         "cds_exons_tag_count": {"name": "CDS_Exons"},
         "5_utr_exons_tag_count": {"name": "5'UTR_Exons"},
         "3_utr_exons_tag_count": {"name": "3'UTR_Exons"},
+        "noncoding_exons_tag_count": {"name": "Noncoding_Exons"},
         "introns_tag_count": {"name": "Introns"},
         "tss_up_1kb_tag_count": {"name": "TSS_up_1kb"},
         "tss_up_1kb-5kb_tag_count": {"name": "TSS_up_1kb-5kb"},

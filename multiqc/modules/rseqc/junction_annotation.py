@@ -20,10 +20,14 @@ def parse_reports(module: BaseMultiqcModule) -> int:
         "known_splicing_events": r"^Known Splicing Events:\s*(\d+)$",
         "partial_novel_splicing_events": r"^Partial Novel Splicing Events:\s*(\d+)$",
         "novel_splicing_events": r"^Novel Splicing Events:\s*(\d+)$",
+        # LBZhao fork of RSeQC (5.1.0+lbzhao): both splice sites annotated, but never
+        # joined in the gene model (e.g. exon skipping). Official RSeQC counts these as known.
+        "novel_combination_splicing_events": r"^Novel Combination Splicing Events:\s*(\d+)$",
         "total_splicing_junctions": r"^Total splicing  Junctions:\s*(\d+)$",
         "known_splicing_junctions": r"^Known Splicing Junctions:\s*(\d+)$",
         "partial_novel_splicing_junctions": r"^Partial Novel Splicing Junctions:\s*(\d+)$",
         "novel_splicing_junctions": r"^Novel Splicing Junctions:\s*(\d+)$",
+        "novel_combination_splicing_junctions": r"^Novel Combination Splicing Junctions:\s*(\d+)$",
     }
 
     # Go through files and parse data using regexes
@@ -43,6 +47,8 @@ def parse_reports(module: BaseMultiqcModule) -> int:
                 d["partial_novel_splicing_events_pct"] = (float(d["partial_novel_splicing_events"]) / t) * 100.0
             if "novel_splicing_events" in d:
                 d["novel_splicing_events_pct"] = (float(d["novel_splicing_events"]) / t) * 100.0
+            if "novel_combination_splicing_events" in d:
+                d["novel_combination_splicing_events_pct"] = (float(d["novel_combination_splicing_events"]) / t) * 100.0
         if "total_splicing_junctions" in d:
             t = float(d["total_splicing_junctions"])
             if "known_splicing_junctions" in d:
@@ -51,6 +57,10 @@ def parse_reports(module: BaseMultiqcModule) -> int:
                 d["partial_novel_splicing_junctions_pct"] = (float(d["partial_novel_splicing_junctions"]) / t) * 100.0
             if "novel_splicing_junctions" in d:
                 d["novel_splicing_junctions_pct"] = (float(d["novel_splicing_junctions"]) / t) * 100.0
+            if "novel_combination_splicing_junctions" in d:
+                d["novel_combination_splicing_junctions_pct"] = (
+                    float(d["novel_combination_splicing_junctions"]) / t
+                ) * 100.0
 
         if len(d) > 0:
             if f["s_name"] in junction_annotation_data:
@@ -75,11 +85,13 @@ def parse_reports(module: BaseMultiqcModule) -> int:
     keys = [
         {
             "known_splicing_junctions": {"name": "Known Splicing Junctions"},
+            "novel_combination_splicing_junctions": {"name": "Novel Combination Splicing Junctions"},
             "partial_novel_splicing_junctions": {"name": "Partial Novel Splicing Junctions"},
             "novel_splicing_junctions": {"name": "Novel Splicing Junctions"},
         },
         {
             "known_splicing_events": {"name": "Known Splicing Events"},
+            "novel_combination_splicing_events": {"name": "Novel Combination Splicing Events"},
             "partial_novel_splicing_events": {"name": "Partial Novel Splicing Events"},
             "novel_splicing_events": {"name": "Novel Splicing Events"},
         },
@@ -97,7 +109,10 @@ def parse_reports(module: BaseMultiqcModule) -> int:
         description='<a href="http://rseqc.sourceforge.net/#junction-annotation-py" target="_blank">Junction annotation</a>'
         " compares detected splice junctions to"
         " a reference gene model. An RNA read can be spliced 2"
-        " or more times, each time is called a splicing event.",
+        " or more times, each time is called a splicing event."
+        " The LBZhao fork of RSeQC (5.1.0+lbzhao) reports junctions joining two annotated"
+        " splice sites that the gene model never pairs (e.g. exon skipping) as novel"
+        " combinations; official RSeQC counts them as known.",
         plot=bargraph.plot([junction_annotation_data, junction_annotation_data], keys, pconfig),
     )
 
